@@ -11,20 +11,22 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(expressLayouts);
 
-app.use(express.static(path.join(__dirname, 'public')));
+// If you run the express app from another directory, it’s safer to use the absolute path of the directory that you want to serve:
+app.use('/', express.static(path.join(__dirname, 'public')));
+// app.use(express.static('public'));
 
 
 app.get('/', (req, res, next) => {
     res.render('index');
 });
 
+//let getBeers()
 app.get('/beers', (req, res, next) => {
     res.render('beers');
     punkAPI.getBeers()
-        .then(beersFromApi => {
-            console.log('beer:', beersFromApi)
-            res.render('beers', { beersFromApi })
-        })
+        .then(beersFromApi =>
+            console.log('Beers from the database:', beersFromApi))
+    res.render('beers', { beersFromApi })
         .catch(error => console.log(error))
 })
 
