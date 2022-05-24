@@ -13,10 +13,25 @@ app.use(expressLayouts);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Add the route handlers here:
 
-app.get('/', (req, res) => {
-  res.render('index');
+app.get('/', (req, res, next) => {
+    res.render('index');
 });
 
-app.listen(3000, () => console.log('🏃‍ on port 3000'));
+app.get('/beers', (req, res, next) => {
+    res.render('beers');
+    punkAPI.getBeers()
+        .then(beersFromApi => {
+            console.log('beer:', beersFromApi)
+            res.render('beers', { beersFromApi })
+        })
+        .catch(error => console.log(error))
+})
+
+app.get('/randomBeer', (req, res, next) => {
+    res.render('randomBeer');
+})
+
+
+//Server started
+app.listen(3001, () => console.log('🏃‍ on port 3001'));
